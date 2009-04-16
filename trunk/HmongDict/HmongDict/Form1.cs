@@ -40,7 +40,7 @@ namespace HmongDict
 
         private void comboBoxWord_TextChanged(object sender, EventArgs e)
         {
-            SQLiteDataReader reader = m_Database.Query("Select * From TableList");
+            SQLiteDataReader reader = m_Database.Query("Select * From TableList limit 4");
             if (reader.HasRows)
             {
                 do
