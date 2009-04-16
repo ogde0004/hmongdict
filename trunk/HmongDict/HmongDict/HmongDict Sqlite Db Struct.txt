@@ -1,0 +1,10 @@
+Êý¾Ý¿â£º
+	1±í£º´Êµä±í
+		ID, CnName, EnName, HmnName, TableName
+		0	Ãçºº´Êµä£¬ Hmong-Chinese Dictionary, XXX, HmongChineseTable
+		1	ººÃç´Êµä£¬ Chinese-Hmong Dictionary, XXX, ChineseHmongTable
+		2	ÃçÓ¢´Êµä£¬ Hmong-English Dictionary, XXX, HmongEnglishTable
+		3	Ó¢Ãç´Êµä£¬ English-Hmong Dictionary, XXX, EnglishHmongTable
+	
+	2±í£ºHmongChineseTable
+		ID,	
