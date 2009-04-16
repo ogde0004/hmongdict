@@ -33,6 +33,8 @@
             this.buttonSearch = new System.Windows.Forms.Button();
             this.webBrowserShowResult = new System.Windows.Forms.WebBrowser();
             this.tabControlMain = new System.Windows.Forms.TabControl();
+            this.contextMenuStripMainUI = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.GetScreenWordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPageSearch = new System.Windows.Forms.TabPage();
             this.tabPageOption = new System.Windows.Forms.TabPage();
             this.label1 = new System.Windows.Forms.Label();
@@ -41,19 +43,17 @@
             this.listBox2 = new System.Windows.Forms.ListBox();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.tabPageAddNewWord = new System.Windows.Forms.TabPage();
+            this.buttonAddWords = new System.Windows.Forms.Button();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.tabPageAbout = new System.Windows.Forms.TabPage();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabelMessage = new System.Windows.Forms.ToolStripStatusLabel();
-            this.contextMenuStripMainUI = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.GetScreenWordToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.buttonAddWords = new System.Windows.Forms.Button();
             this.tabControlMain.SuspendLayout();
+            this.contextMenuStripMainUI.SuspendLayout();
             this.tabPageSearch.SuspendLayout();
             this.tabPageOption.SuspendLayout();
             this.tabPageAddNewWord.SuspendLayout();
             this.statusStrip1.SuspendLayout();
-            this.contextMenuStripMainUI.SuspendLayout();
             this.SuspendLayout();
             // 
             // comboBoxWord
@@ -111,6 +111,9 @@
             // 
             // tabControlMain
             // 
+            this.tabControlMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControlMain.Appearance = System.Windows.Forms.TabAppearance.FlatButtons;
             this.tabControlMain.ContextMenuStrip = this.contextMenuStripMainUI;
             this.tabControlMain.Controls.Add(this.tabPageSearch);
@@ -124,6 +127,20 @@
             this.tabControlMain.SelectedIndex = 0;
             this.tabControlMain.Size = new System.Drawing.Size(368, 475);
             this.tabControlMain.TabIndex = 3;
+            // 
+            // contextMenuStripMainUI
+            // 
+            this.contextMenuStripMainUI.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.GetScreenWordToolStripMenuItem});
+            this.contextMenuStripMainUI.Name = "contextMenuStripMainUI";
+            this.contextMenuStripMainUI.Size = new System.Drawing.Size(161, 26);
+            // 
+            // GetScreenWordToolStripMenuItem
+            // 
+            this.GetScreenWordToolStripMenuItem.Name = "GetScreenWordToolStripMenuItem";
+            this.GetScreenWordToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
+            this.GetScreenWordToolStripMenuItem.Text = "Get Screen Word";
+            this.GetScreenWordToolStripMenuItem.Click += new System.EventHandler(this.GetScreenWordToolStripMenuItem_Click);
             // 
             // tabPageSearch
             // 
@@ -209,6 +226,16 @@
             this.tabPageAddNewWord.Text = "Add";
             this.tabPageAddNewWord.UseVisualStyleBackColor = true;
             // 
+            // buttonAddWords
+            // 
+            this.buttonAddWords.Location = new System.Drawing.Point(195, 343);
+            this.buttonAddWords.Name = "buttonAddWords";
+            this.buttonAddWords.Size = new System.Drawing.Size(136, 23);
+            this.buttonAddWords.TabIndex = 1;
+            this.buttonAddWords.Text = "Add New Words";
+            this.buttonAddWords.UseVisualStyleBackColor = true;
+            this.buttonAddWords.Click += new System.EventHandler(this.buttonAddWords_Click);
+            // 
             // richTextBox1
             // 
             this.richTextBox1.Location = new System.Drawing.Point(6, 6);
@@ -244,30 +271,6 @@
             this.toolStripStatusLabelMessage.Size = new System.Drawing.Size(35, 17);
             this.toolStripStatusLabelMessage.Text = "Ready";
             // 
-            // contextMenuStripMainUI
-            // 
-            this.contextMenuStripMainUI.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.GetScreenWordToolStripMenuItem});
-            this.contextMenuStripMainUI.Name = "contextMenuStripMainUI";
-            this.contextMenuStripMainUI.Size = new System.Drawing.Size(161, 26);
-            // 
-            // GetScreenWordToolStripMenuItem
-            // 
-            this.GetScreenWordToolStripMenuItem.Name = "GetScreenWordToolStripMenuItem";
-            this.GetScreenWordToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
-            this.GetScreenWordToolStripMenuItem.Text = "Get Screen Word";
-            this.GetScreenWordToolStripMenuItem.Click += new System.EventHandler(this.GetScreenWordToolStripMenuItem_Click);
-            // 
-            // buttonAddWords
-            // 
-            this.buttonAddWords.Location = new System.Drawing.Point(195, 343);
-            this.buttonAddWords.Name = "buttonAddWords";
-            this.buttonAddWords.Size = new System.Drawing.Size(136, 23);
-            this.buttonAddWords.TabIndex = 1;
-            this.buttonAddWords.Text = "Add New Words";
-            this.buttonAddWords.UseVisualStyleBackColor = true;
-            this.buttonAddWords.Click += new System.EventHandler(this.buttonAddWords_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -280,13 +283,13 @@
             this.Text = "Hmong Dictionrary";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.tabControlMain.ResumeLayout(false);
+            this.contextMenuStripMainUI.ResumeLayout(false);
             this.tabPageSearch.ResumeLayout(false);
             this.tabPageOption.ResumeLayout(false);
             this.tabPageOption.PerformLayout();
             this.tabPageAddNewWord.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            this.contextMenuStripMainUI.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
