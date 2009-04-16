@@ -21,12 +21,13 @@ namespace HmongDict
             SQLiteCon.ConnectionString = @"Data Source=Dict.db; Password=Hmong";
             SQLiteCon.Open();
 
-            if (bDbExisted)
+            if (!bDbExisted)
             {
                 InsertTableListRows();
             }
         }
 
+        /*
         ~Database()
         {
             if (null != SQLiteCon)
@@ -36,6 +37,7 @@ namespace HmongDict
                 SQLiteCon = null;
             }
         }
+        */
 
         public SQLiteDataReader Query(string strCmd)
         {
@@ -50,12 +52,16 @@ namespace HmongDict
 
         private bool InsertTableListRows()
         {
-            for (int a = 0; a < 50; a++)
+            SQLiteCommand cmd = new SQLiteCommand(SQLiteCon);
+            SQLiteTransaction trans = SQLiteCon.BeginTransaction();
+
+            for (int a = 0; a < 50000; a++)
             {
-                string strCreateTableCmd = @"INSERT INTO `TableList` (`ID`, `CnName`, `EnName`, `HmName`, `TableName`) values(NULL, '反对', 'fdl', 'fds', 'fdsa" + a.ToString() + "')";
-                SQLiteCommand cmd = new SQLiteCommand(strCreateTableCmd, SQLiteCon);
+                cmd.CommandText = @"INSERT INTO `TableList` (`ID`, `CnName`, `EnName`, `HmName`, `TableName`) values(NULL, '反对', 'fdl', 'fds', 'fdsa" + a.ToString() + "')";
                 cmd.ExecuteNonQuery();
             }
+
+            trans.Commit();
 
             return true;
         }
