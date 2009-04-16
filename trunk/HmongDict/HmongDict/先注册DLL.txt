@@ -1,0 +1,3 @@
+зЂВс     regsvr32 XdictGrb.dll
+
+ШЁЯћзЂВс regsvr32 XdictGrb.dll /u
