@@ -10,6 +10,7 @@ using System.Data.SQLite;
 using System.Threading;
 using System.Globalization;
 using UILanguage;
+using Downloader;
 using System.Net;
 using System.Diagnostics;
 
