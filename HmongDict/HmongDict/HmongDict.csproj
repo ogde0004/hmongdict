@@ -102,6 +102,10 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Downloader\Downloader.csproj">
+      <Project>{B6286FF5-3CC5-4C21-B49E-B1FA1480BBCE}</Project>
+      <Name>Downloader</Name>
+    </ProjectReference>
     <ProjectReference Include="..\UILanguage\UILanguage.csproj">
       <Project>{6F31E54C-3E00-4C68-9144-98B07FFFB8B6}</Project>
       <Name>UILanguage</Name>
