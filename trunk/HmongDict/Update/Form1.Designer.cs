@@ -30,8 +30,8 @@
         {
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.progressBar2 = new System.Windows.Forms.ProgressBar();
+            this.progressBarTatol = new System.Windows.Forms.ProgressBar();
+            this.progressBarCurrentFile = new System.Windows.Forms.ProgressBar();
             this.labelCurrentFileAndDownRate = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.webBrowserNewVersionInfo = new System.Windows.Forms.WebBrowser();
@@ -60,23 +60,23 @@
             this.label2.TabIndex = 0;
             this.label2.Text = "Current";
             // 
-            // progressBar1
+            // progressBarTatol
             // 
-            this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            this.progressBarTatol.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar1.Location = new System.Drawing.Point(70, 288);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(323, 23);
-            this.progressBar1.TabIndex = 2;
+            this.progressBarTatol.Location = new System.Drawing.Point(70, 288);
+            this.progressBarTatol.Name = "progressBarTatol";
+            this.progressBarTatol.Size = new System.Drawing.Size(323, 23);
+            this.progressBarTatol.TabIndex = 2;
             // 
-            // progressBar2
+            // progressBarCurrentFile
             // 
-            this.progressBar2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
+            this.progressBarCurrentFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar2.Location = new System.Drawing.Point(70, 250);
-            this.progressBar2.Name = "progressBar2";
-            this.progressBar2.Size = new System.Drawing.Size(323, 23);
-            this.progressBar2.TabIndex = 2;
+            this.progressBarCurrentFile.Location = new System.Drawing.Point(70, 250);
+            this.progressBarCurrentFile.Name = "progressBarCurrentFile";
+            this.progressBarCurrentFile.Size = new System.Drawing.Size(323, 23);
+            this.progressBarCurrentFile.TabIndex = 2;
             // 
             // labelCurrentFileAndDownRate
             // 
@@ -84,9 +84,9 @@
             this.labelCurrentFileAndDownRate.AutoSize = true;
             this.labelCurrentFileAndDownRate.Location = new System.Drawing.Point(68, 228);
             this.labelCurrentFileAndDownRate.Name = "labelCurrentFileAndDownRate";
-            this.labelCurrentFileAndDownRate.Size = new System.Drawing.Size(41, 12);
+            this.labelCurrentFileAndDownRate.Size = new System.Drawing.Size(65, 12);
             this.labelCurrentFileAndDownRate.TabIndex = 0;
-            this.labelCurrentFileAndDownRate.Text = "label1";
+            this.labelCurrentFileAndDownRate.Text = "          ";
             // 
             // label3
             // 
@@ -117,7 +117,7 @@
             this.buttonUpdate.Name = "buttonUpdate";
             this.buttonUpdate.Size = new System.Drawing.Size(111, 23);
             this.buttonUpdate.TabIndex = 3;
-            this.buttonUpdate.Text = "Update";
+            this.buttonUpdate.Text = "Start";
             this.buttonUpdate.UseVisualStyleBackColor = true;
             this.buttonUpdate.Click += new System.EventHandler(this.buttonUpdate_Click);
             // 
@@ -128,7 +128,7 @@
             this.buttonPauseUpdate.Name = "buttonPauseUpdate";
             this.buttonPauseUpdate.Size = new System.Drawing.Size(111, 23);
             this.buttonPauseUpdate.TabIndex = 3;
-            this.buttonPauseUpdate.Text = "Pause Update";
+            this.buttonPauseUpdate.Text = "Suspend";
             this.buttonPauseUpdate.UseVisualStyleBackColor = true;
             this.buttonPauseUpdate.Click += new System.EventHandler(this.buttonPauseUpdate_Click);
             // 
@@ -139,7 +139,7 @@
             this.buttonExit.Name = "buttonExit";
             this.buttonExit.Size = new System.Drawing.Size(111, 23);
             this.buttonExit.TabIndex = 3;
-            this.buttonExit.Text = "Exit";
+            this.buttonExit.Text = "Stop && Exit";
             this.buttonExit.UseVisualStyleBackColor = true;
             this.buttonExit.Click += new System.EventHandler(this.buttonExit_Click);
             // 
@@ -151,8 +151,8 @@
             this.Controls.Add(this.buttonExit);
             this.Controls.Add(this.buttonPauseUpdate);
             this.Controls.Add(this.buttonUpdate);
-            this.Controls.Add(this.progressBar2);
-            this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.progressBarCurrentFile);
+            this.Controls.Add(this.progressBarTatol);
             this.Controls.Add(this.webBrowserNewVersionInfo);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.labelCurrentFileAndDownRate);
@@ -171,8 +171,8 @@
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ProgressBar progressBar1;
-        private System.Windows.Forms.ProgressBar progressBar2;
+        private System.Windows.Forms.ProgressBar progressBarTatol;
+        private System.Windows.Forms.ProgressBar progressBarCurrentFile;
         private System.Windows.Forms.Label labelCurrentFileAndDownRate;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.WebBrowser webBrowserNewVersionInfo;
