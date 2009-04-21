@@ -96,17 +96,24 @@ namespace HmongDict
 
         private string GetUrlContent(string strUrl)
         {
-            WebRequest req = HttpWebRequest.Create(new Uri(strUrl));
-            WebResponse res = req.GetResponse();
-            StreamReader sr = new StreamReader(res.GetResponseStream());
-            
-            string strUrlPageContent = sr.ReadToEnd();
+            try
+            {
 
-            sr.Close();
-            sr.Dispose();
-            res.Close();
+                WebRequest req = HttpWebRequest.Create(new Uri(strUrl));
+                WebResponse res = req.GetResponse();
+                StreamReader sr = new StreamReader(res.GetResponseStream());
 
-            return strUrlPageContent;
+                string strUrlPageContent = sr.ReadToEnd();
+
+                sr.Close();
+                sr.Dispose();
+                res.Close();
+
+                return strUrlPageContent;
+            }
+            catch { }
+
+            return "";
         }
 
         private string GetCurrentUILanguage()
