@@ -9,14 +9,14 @@ namespace Downloader
 {
     public class Downloader
     {
-        long m_nFileLength = 0;
-        long m_nBytesReadCount = 0;
-        object m_objDownloadRate = (long)0;   //object类型可多线程互斥访问
+        long m_nAllFilesLength = 0;        //所有文件总长度
+        long m_nAllBytesReadCount = 0;     //所有文件已经读取字节数
 
-        string m_strHttpFileUrl = null;
-        string m_strReferUrl = null;
-        string m_strSaveAsFile = null;
-        FileStream m_FileStream = null;
+        object m_objDownloadRate = (long)0;   //object类型可多线程互斥访问
+        int m_nCurrentTaskIndex = -1;
+        bool m_bGetAllHttpFilesLengthSuccess = false;
+        
+        List<DownloadTask> m_DownloadList = new List<DownloadTask>();
 
         bool m_bDownloadFinished = false;    //下载任务成功完成
 
@@ -38,41 +38,97 @@ namespace Downloader
         }
         DownloaderAction m_Action = DownloaderAction.None;
 
-        public Downloader(string strHttpFileUrl)
+        public Downloader()
         {
-            m_strHttpFileUrl = strHttpFileUrl;
-            m_strSaveAsFile = "File.tmp";
         }
 
-        /// <summary>
-        /// 构造函数
-        /// </summary>
-        /// <param name="strHttpFileUrl">远程web网站文件地址</param>
-        /// <param name="strSaveAsFile">保存为本地文件路径及名称</param>
-        public Downloader(string strHttpFileUrl, string strSaveAsFile)
+        public void AddTask(string strHttpFileUrl)
         {
-            m_strHttpFileUrl = strHttpFileUrl;
-            m_strSaveAsFile = strSaveAsFile;
+            AddTask(strHttpFileUrl, "");
+        }
+        public void AddTask(string strHttpFileUrl, string strSavePath)
+        {
+            string[] strSplit = strHttpFileUrl.Split('/');
+            string strFileName = strSplit[strSplit.Length - 1];
+
+            AddTask(strHttpFileUrl, strSavePath, strFileName);
+        }
+        public void AddTask(string strHttpFileUrl, string strSavePath, string strSaveAsFileName)
+        {
+            DownloadTask task = new DownloadTask();
+            task.HttpFileUrl = strHttpFileUrl;
+            task.SaveAsFile = strSavePath + strSaveAsFileName;
+
+            AddTask(task);
         }
 
-        public long FileLength
+        public string CurrentFileName
         {
             get
             {
-                return m_nFileLength;
+                if ((m_nCurrentTaskIndex < 0)
+                    || (m_nCurrentTaskIndex >= m_DownloadList.Count))
+                {
+                    return "";
+                    //throw new Exception("Not Init!");
+                }
+
+                return m_DownloadList[m_nCurrentTaskIndex].SaveAsFile;
+            }
+        }
+        public long CurrentFileLength
+        {
+            get
+            {
+                if ((m_nCurrentTaskIndex < 0)
+                    || (m_nCurrentTaskIndex >= m_DownloadList.Count))
+                {
+                    return 0;
+                    //throw new Exception("Not Init!");
+                }
+
+                return m_DownloadList[m_nCurrentTaskIndex].FileLength;
             }
         }
         public long CurrentReadBytesCount
         {
             get
             {
-                return m_nBytesReadCount;
+                if ((m_nCurrentTaskIndex < 0)
+                    || (m_nCurrentTaskIndex >= m_DownloadList.Count))
+                {
+                    return 0;
+                    //throw new Exception("Not Init!");
+                }
+
+                return m_DownloadList[m_nCurrentTaskIndex].BytesReadCount;
+            }
+        }
+        public long AllFilesLength
+        {
+            get
+            {
+                return m_nAllFilesLength;
+            }
+        }
+        public long AllReadBytesCount
+        {
+            get
+            {
+                return m_nAllBytesReadCount;
             }
         }
         public bool Finished
         {
             get
             {
+                if ((m_nCurrentTaskIndex < 0)
+                    || (m_nCurrentTaskIndex >= m_DownloadList.Count))
+                {
+                    return false;
+                    //throw new Exception("Not Init!");
+                }
+
                 return m_bDownloadFinished;
             }
         }
@@ -80,17 +136,46 @@ namespace Downloader
         {
             get
             {
-                return (m_bDownloadFinished && (m_nBytesReadCount > 0));
+                if ((m_nCurrentTaskIndex < 0)
+                    || (m_nCurrentTaskIndex >= m_DownloadList.Count))
+                {
+                    return false;
+                    //throw new Exception("Not Init!");
+                }
+
+                return (m_bDownloadFinished && (m_DownloadList[m_DownloadList.Count - 1].Success));
             }
         }
-        public int CurrentPercent
+
+        public int CurrentDownloadFilePercent
         {
             get
             {
-                if (m_nFileLength <= 0)
+                if ((m_nCurrentTaskIndex < 0)
+                    || (m_nCurrentTaskIndex >= m_DownloadList.Count))
+                {
+                    return 0;
+                    //throw new Exception("Not Init!");
+                }
+
+                if (m_DownloadList[m_nCurrentTaskIndex].FileLength <= 0)
                     return 0;
 
-                return (int)(m_nBytesReadCount * 100 / m_nFileLength);
+                return (int)(m_DownloadList[m_nCurrentTaskIndex].BytesReadCount * 100 / m_DownloadList[m_nCurrentTaskIndex].FileLength);
+            }
+        }
+
+        public int AllDownloadFilesPercent
+        {
+            get
+            {
+                if (m_bDownloadFinished)
+                    return 100;
+
+                if (m_bGetAllHttpFilesLengthSuccess)
+                    return (int)(m_nAllBytesReadCount * 100 / m_nAllFilesLength);
+
+                return m_nCurrentTaskIndex * 100 / m_DownloadList.Count;
             }
         }
         public long Rate
@@ -118,21 +203,49 @@ namespace Downloader
                     nRate = (long)m_objDownloadRate;
                 }
 
-                return GetFormatFileLen(nRate);
+                return GetFormatFileLen(nRate) + "/S";
             }
         }
-        public string FormatCurrentReadBytesCount
+        public string FormatCurrentFileReadBytesCount
         {
             get
             {
-                return GetFormatFileLen(m_nBytesReadCount);
+                if ((m_nCurrentTaskIndex < 0)
+                    || (m_nCurrentTaskIndex >= m_DownloadList.Count))
+                {
+                    return "";
+                    //throw new Exception("Not Init!");
+                }
+
+                return GetFormatFileLen(m_DownloadList[m_nCurrentTaskIndex].BytesReadCount);
             }
         }
-        public string FormatFileLength
+        public string FormatCurrentFileLength
         {
             get
             {
-                return GetFormatFileLen(m_nFileLength);
+                if ((m_nCurrentTaskIndex < 0)
+                    || (m_nCurrentTaskIndex >= m_DownloadList.Count))
+                {
+                    return "";
+                    //throw new Exception("Not Init!");
+                }
+
+                return GetFormatFileLen(m_DownloadList[m_nCurrentTaskIndex].FileLength);
+            }
+        }
+        public string FormatAllFilesLength
+        {
+            get
+            {
+                return GetFormatFileLen(m_nAllFilesLength);
+            }
+        }
+        public string FormatAllReadBytesCount
+        {
+            get
+            {
+                return GetFormatFileLen(m_nAllBytesReadCount);
             }
         }
         public DownloaderStatus Status
@@ -153,14 +266,13 @@ namespace Downloader
             }
             else
             {
-                m_nFileLength = GetHttpFileLength();
-                m_strReferUrl = m_strHttpFileUrl.Substring(0, m_strHttpFileUrl.LastIndexOf('/'));
-
-                if (m_nFileLength > 0)
-                {
-                    Thread thread = new Thread(new ThreadStart(Download));
-                    thread.Start();
-                }
+                m_bGetAllHttpFilesLengthSuccess = false;
+                
+                Thread threadDown = new Thread(new ThreadStart(Download));
+                threadDown.Start();
+                
+                Thread threadGetLens = new Thread(new ThreadStart(GetAllHttpFilesLength));
+                threadGetLens.Start();
             }
         }
         public void Suspend()
@@ -176,32 +288,24 @@ namespace Downloader
 
         private void Download()
         {
-            m_FileStream = File.Create(m_strSaveAsFile);
-            bool bStatus = true;
+            m_nCurrentTaskIndex = -1;
+            bool bStopDownload = false;
 
-            while (bStatus) //下载失败，循环继续下（第二次下载是从断点处继续下）
+            while (true) //下载失败，循环继续下（第二次下载是从断点处继续下）
             {
-                if(m_nBytesReadCount >= m_nFileLength)
-                {
+                if (bStopDownload)
                     break;
-                }
+
+                if (m_nCurrentTaskIndex < (m_DownloadList.Count - 1))
+                    m_nCurrentTaskIndex += 1;
+                else
+                    break;
 
                 switch(m_Action)
                 {
                     case DownloaderAction.None:       //无动作
                     case DownloaderAction.Run:        //开始/继续下载
-                        {
-                            if (!DownloadFile())    //下载失败(可能是超时或者服务器拒绝。。。)
-                            {
-                                lock (m_objDownloadRate)
-                                {
-                                    m_objDownloadRate = (long)0;
-                                }
-                                
-                                if(m_Action == DownloaderAction.Run)
-                                    Thread.Sleep(5000); //5秒后重试
-                            }
-                        }
+                        DownloadFile();
                         break;
 
                     case DownloaderAction.Suspend:    //暂停下载
@@ -213,95 +317,185 @@ namespace Downloader
                         break;
 
                     case DownloaderAction.Stop:       //停止下载
-                        bStatus = false;
+                        bStopDownload = true;
                         break;
                 }
             }
-
-            m_FileStream.Close();
-            m_FileStream.Dispose();
-            m_FileStream = null;
 
             m_bDownloadFinished = true;
         }
         private bool DownloadFile()
         {
-            try
+            FileStream fileStream = File.OpenWrite(m_DownloadList[m_nCurrentTaskIndex].SaveAsFile);
+            if (fileStream.CanSeek)
             {
-                HttpWebRequest request = (HttpWebRequest)(HttpWebRequest.Create(new Uri(m_strHttpFileUrl)));
-                request.Timeout = 5000;
-                request.Accept = @"*/*";
-                request.Referer = m_strReferUrl;
-                request.UserAgent = "";
-                request.AllowAutoRedirect = true;
-                request.AddRange((int)m_nBytesReadCount);
+                fileStream.Seek(0, SeekOrigin.End);
+            }
 
-                HttpWebResponse response = (HttpWebResponse)(request.GetResponse());
-                if (!((response.StatusCode == HttpStatusCode.OK) || (response.StatusCode == HttpStatusCode.PartialContent)))
+            if (m_DownloadList[m_nCurrentTaskIndex].FileLength <= 0)
+            {
+                m_DownloadList[m_nCurrentTaskIndex].FileLength = GetHttpFileLength(m_DownloadList[m_nCurrentTaskIndex].HttpFileUrl);
+            }
+
+            if (m_DownloadList[m_nCurrentTaskIndex].FileLength == fileStream.Length)
+            {
+                m_DownloadList[m_nCurrentTaskIndex].BytesReadCount = fileStream.Length;
+                m_nAllBytesReadCount += fileStream.Length;
+                return true;
+            }
+
+            if (m_DownloadList[m_nCurrentTaskIndex].FileLength < fileStream.Length)
+            {
+                fileStream.Seek(0, SeekOrigin.Begin);
+                m_DownloadList[m_nCurrentTaskIndex].BytesReadCount = 0;
+            }
+            else
+            {
+                m_DownloadList[m_nCurrentTaskIndex].BytesReadCount = fileStream.Length;
+                m_nAllBytesReadCount += fileStream.Length;
+            }
+
+            int nErrorTimesCount = 0; //服务器拒绝或者文件不存在错误次数
+            bool bExitDownloadThisFile = false;
+            while (!bExitDownloadThisFile)
+            {
+                while (m_Action == DownloaderAction.Suspend)    //暂停下载
                 {
-                    throw new Exception("HttpStatusCode: " + response.StatusCode.ToString());
-                }
-
-                m_nFileLength = m_nBytesReadCount + response.ContentLength;
-
-                Stream stream = response.GetResponseStream();
-
-                Byte[] btArrBuffer = new Byte[10240];
-                int nCurReadBytesCnt = 0;
-                long nReadBytesCnt = 0;
-                DateTime nPrevTime = DateTime.Now;
-                TimeSpan timeSpan;
-                
-                while (true)
-                {
-                    if (m_nBytesReadCount >= m_nFileLength)
-                        break;
-
-                    if ((m_Action == DownloaderAction.Suspend)
-                        || (m_Action == DownloaderAction.Stop))
-                        break;
-
-                    nCurReadBytesCnt = stream.Read(btArrBuffer, 0, btArrBuffer.Length);
-                    if (nCurReadBytesCnt <= 0)
-                        break;
-
-                    m_FileStream.Write(btArrBuffer, 0, nCurReadBytesCnt);
-                    m_nBytesReadCount += nCurReadBytesCnt;
-                    nReadBytesCnt += nCurReadBytesCnt;
-
-                    timeSpan = DateTime.Now - nPrevTime;
-                    if (timeSpan.TotalMilliseconds > 250)
+                    lock (m_objDownloadRate)
                     {
-                        lock (m_objDownloadRate)
-                        {
-                            m_objDownloadRate = nReadBytesCnt * 1000 / 900;
-                        }
-
-                        nReadBytesCnt = 0;
-                        nPrevTime = DateTime.Now;
+                        m_objDownloadRate = (long)0;
                     }
+
+                    Thread.Sleep(500);
                 }
 
-                stream.Close();
-                stream.Dispose();
-                response.Close();
-            }
-            catch
-            {
+                if ((m_Action == DownloaderAction.Stop)          //停止下载
+                    || (nErrorTimesCount > 25))   //或者 错误次数 > 25
+                {
+                    bExitDownloadThisFile = false;
+                    break;
+                }
+
+                HttpWebResponse response = null;
+                Stream stream = null;
+
+                try
+                {
+                    HttpWebRequest request = (HttpWebRequest)(HttpWebRequest.Create(new Uri(m_DownloadList[m_nCurrentTaskIndex].HttpFileUrl)));
+                    request.Timeout = 10000;
+                    request.Accept = @"*/*";
+                    request.Referer = GetHttpReferUrl(request.RequestUri.AbsolutePath);
+                    request.UserAgent = "";
+                    request.AllowAutoRedirect = true;
+                    request.AddRange((int)(m_DownloadList[m_nCurrentTaskIndex].BytesReadCount));
+
+                    response = (HttpWebResponse)(request.GetResponse());
+                    if (!((response.StatusCode == HttpStatusCode.OK) || (response.StatusCode == HttpStatusCode.PartialContent)))
+                    {
+                        throw new Exception("HttpStatusCode: " + response.StatusCode.ToString());
+                    }
+
+                    m_DownloadList[m_nCurrentTaskIndex].FileLength = m_DownloadList[m_nCurrentTaskIndex].BytesReadCount + response.ContentLength;
+                    stream = response.GetResponseStream();
+
+                    Byte[] btArrBuffer = new Byte[10240];
+                    int nCurReadBytesCnt = 0;
+                    long nReadBytesCnt = 0;
+                    DateTime nPrevTime = DateTime.Now;
+                    TimeSpan timeSpan;
+
+                    while (true)
+                    {
+                        if (m_DownloadList[m_nCurrentTaskIndex].BytesReadCount >= m_DownloadList[m_nCurrentTaskIndex].FileLength)
+                            break;
+
+                        if ((m_Action == DownloaderAction.Suspend)      //暂停下载
+                            || (m_Action == DownloaderAction.Stop))     //或者 停止下载
+                            break;
+
+                        nCurReadBytesCnt = stream.Read(btArrBuffer, 0, btArrBuffer.Length);
+                        if (nCurReadBytesCnt <= 0)
+                            break;
+
+                        fileStream.Write(btArrBuffer, 0, nCurReadBytesCnt);
+                        m_DownloadList[m_nCurrentTaskIndex].BytesReadCount += nCurReadBytesCnt;
+                        nReadBytesCnt += nCurReadBytesCnt;
+                        m_nAllBytesReadCount += nCurReadBytesCnt;
+                        nErrorTimesCount = 0;
+
+                        timeSpan = DateTime.Now - nPrevTime;
+                        if (timeSpan.TotalMilliseconds > 250)
+                        {
+                            lock (m_objDownloadRate)
+                            {
+                                m_objDownloadRate = nReadBytesCnt * 1000 / 900;
+                            }
+
+                            nReadBytesCnt = 0;
+                            nPrevTime = DateTime.Now;
+                        }
+                    }
+
+                    stream.Close();
+                    stream.Dispose();
+                    stream = null;
+
+                    response.Close();
+                    response = null;
+                    
+                    if ((m_Action != DownloaderAction.Suspend)
+                         && (m_Action != DownloaderAction.Stop))
+                        bExitDownloadThisFile = true;
+                }
+                catch   //异常断开连接，等待重新连接
+                {
+                    lock (m_objDownloadRate)
+                    {
+                        m_objDownloadRate = (long)0;
+                    }
+
+                    try
+                    {
+                        if (null != stream)
+                        {
+                            stream.Close();
+                            stream.Dispose();
+                        }
+                    }
+                    catch { }
+                    
+                    try
+                    {
+                        if (null != response)
+                        {
+                            response.Close();
+                            response = null;
+                        }
+                    }
+                    catch { }
+
+                    nErrorTimesCount += 1;
+                    Thread.Sleep(5000); //5秒后重试
+                }
             }
 
-            return (m_nFileLength == m_nBytesReadCount);
+            fileStream.Close();
+            fileStream.Dispose();
+            fileStream = null;
+
+            return m_DownloadList[m_nCurrentTaskIndex].Success;
         }
-        private long GetHttpFileLength()
+
+        private long GetHttpFileLength(string strHttpFileUrl)
         {
             long nLength;
 
             try
             {
-                HttpWebRequest request = (HttpWebRequest)(HttpWebRequest.Create(new Uri(m_strHttpFileUrl)));
+                HttpWebRequest request = (HttpWebRequest)(HttpWebRequest.Create(new Uri(strHttpFileUrl)));
                 request.Timeout = 5000;
                 request.Accept = @"*/*";
-                request.Referer = m_strReferUrl;
+                request.Referer = "";
                 request.UserAgent = "";
                 request.AllowAutoRedirect = true;
 
@@ -317,6 +511,57 @@ namespace Downloader
 
             return nLength;
         }
+        private void GetAllHttpFilesLength()
+        {
+            bool bGetAllHttpFilesLengthSuccess = true;
+            long HttpFileLength;
+
+            foreach (DownloadTask task in m_DownloadList)
+            {
+                try
+                {
+                    HttpWebRequest request = (HttpWebRequest)(HttpWebRequest.Create(new Uri(task.HttpFileUrl)));
+                    request.Timeout = 5000;
+                    request.Accept = @"*/*";
+                    request.Referer = GetHttpReferUrl(request.RequestUri.AbsolutePath);
+                    request.UserAgent = "";
+                    request.AllowAutoRedirect = true;
+
+                    HttpWebResponse response = (HttpWebResponse)(request.GetResponse());
+                    HttpFileLength = response.ContentLength;
+
+                    if (HttpFileLength > 0)
+                    {
+                        m_nAllFilesLength += HttpFileLength;
+                        task.FileLength = HttpFileLength;
+                    }
+                    else
+                    {
+                        bGetAllHttpFilesLengthSuccess = false;
+                    }
+
+                    response.Close();
+                }
+                catch
+                {
+                    bGetAllHttpFilesLengthSuccess = false;
+                }
+            }
+
+            m_bGetAllHttpFilesLengthSuccess = bGetAllHttpFilesLengthSuccess;
+        }
+        private string GetHttpReferUrl(string strHttpFileUrl)
+        {
+            string strReferUrl = strHttpFileUrl;
+
+            int nPos = strHttpFileUrl.LastIndexOf('/');
+            if (nPos != -1)
+            {
+                strReferUrl = strHttpFileUrl.Substring(0, nPos + 1);
+            }
+
+            return strReferUrl;
+        }
         private string GetFormatFileLen(long nFileLen)
         {
             if (nFileLen < 1000)   //Byte
@@ -331,6 +576,10 @@ namespace Downloader
             {
                 return (Math.Round(((double)nFileLen) / 1024 / 1024, 2).ToString() + " MB");
             }
+        }
+        private void AddTask(DownloadTask task)
+        {
+            this.m_DownloadList.Add(task);
         }
     }
 }
