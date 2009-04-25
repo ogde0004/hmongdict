@@ -75,16 +75,18 @@ namespace HmongDict
         private void AutoUpdate()
         {
             string strLastVertion = GetLastVersion();
-
-            if (strLastVertion != Application.ProductVersion)
+            if (strLastVertion.Length > 0)
             {
-                string strUpdateAppPath = Application.StartupPath + @"\Update.exe";
-                if (File.Exists(strUpdateAppPath))
+                if (VersionCompare.CompareResult.Greater == VersionCompare.Compare(strLastVertion, Application.ProductVersion))
                 {
-                    Process pro = new Process();
-                    pro.StartInfo.Arguments = "";
-                    pro.StartInfo.FileName = strUpdateAppPath;
-                    pro.Start();
+                    string strUpdateAppPath = Application.StartupPath + @"\Update.exe";
+                    if (File.Exists(strUpdateAppPath))
+                    {
+                        Process pro = new Process();
+                        pro.StartInfo.Arguments = "";
+                        pro.StartInfo.FileName = strUpdateAppPath;
+                        pro.Start();
+                    }
                 }
             }
         }
@@ -98,9 +100,15 @@ namespace HmongDict
         {
             try
             {
-
                 WebRequest req = HttpWebRequest.Create(new Uri(strUrl));
                 WebResponse res = req.GetResponse();
+                HttpWebResponse hwr = (HttpWebResponse)res;
+                
+                if (hwr.StatusCode != HttpStatusCode.OK)
+                {
+                    throw new Exception("读取网页内容失败");
+                }
+
                 StreamReader sr = new StreamReader(res.GetResponseStream());
 
                 string strUrlPageContent = sr.ReadToEnd();
@@ -111,9 +119,10 @@ namespace HmongDict
 
                 return strUrlPageContent;
             }
-            catch { }
-
-            return "";
+            catch
+            {
+                return ""; 
+            }
         }
 
         private string GetCurrentUILanguage()
