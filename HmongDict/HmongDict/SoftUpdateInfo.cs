@@ -41,6 +41,14 @@ namespace HmongDict
             }
         }
 
+        public UpdateFileInfo this[int index]
+        {
+            get
+            {
+                return m_nFileList[index];
+            }
+        }
+
         public void LoadFile(string strFileName)
         {
             XmlDocument XmlDoc = new XmlDocument();
