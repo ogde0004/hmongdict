@@ -26,7 +26,7 @@ namespace HmongDict
         const string m_strMiniHomgPageUrl = @"http://www.hmongsoft.com/?Soft=HmongDict&Action=GetMiniHomePage";
         const string m_strAddNewWordsPageUrl = @"http://www.hmongsoft.com/?Soft=HmongDict&Action=AddNewWords";
         const string m_strAboutPageUrl = @"http://www.hmongsoft.com/?Soft=HmongDict&Action=About";
-        const string m_strGetLastVersionPageUrl = @"http://www.hmongsoft.com/?Soft=HmongDict&Action=GetLastVersionNumber";
+        const string m_strGetLastVersionPageUrl = @"http://www.hmongsoft.com/Default.aspx?Soft=HmongDict&Action=GetLastVersionInfo";
 
         public Form1()
         {
@@ -74,21 +74,27 @@ namespace HmongDict
 
         private void AutoUpdate()
         {
-            string strLastVertion = GetLastVersion();
-            if (strLastVertion.Length > 0)
+            try
             {
-                if (VersionCompare.CompareResult.Greater == VersionCompare.Compare(strLastVertion, Application.ProductVersion))
+                SoftUpdateInfo sui = new SoftUpdateInfo();
+                sui.LoadFile(m_strGetLastVersionPageUrl);
+
+                if (sui.Version.Length > 0)
                 {
-                    string strUpdateAppPath = Application.StartupPath + @"\Update.exe";
-                    if (File.Exists(strUpdateAppPath))
+                    if (VersionCompare.CompareResult.Greater == VersionCompare.Compare(sui.Version, Application.ProductVersion))
                     {
-                        Process pro = new Process();
-                        pro.StartInfo.Arguments = "";
-                        pro.StartInfo.FileName = strUpdateAppPath;
-                        pro.Start();
+                        string strUpdateAppPath = Application.StartupPath + @"\Update.exe";
+                        if (File.Exists(strUpdateAppPath))
+                        {
+                            Process pro = new Process();
+                            pro.StartInfo.Arguments = "";
+                            pro.StartInfo.FileName = strUpdateAppPath;
+                            pro.Start();
+                        }
                     }
                 }
             }
+            catch{}
         }
 
         private string GetLastVersion()
