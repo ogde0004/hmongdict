@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.progressBarTatol = new System.Windows.Forms.ProgressBar();
@@ -42,112 +43,103 @@
             // 
             // label1
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 299);
+            this.label1.AccessibleDescription = null;
+            this.label1.AccessibleName = null;
+            resources.ApplyResources(this.label1, "label1");
+            this.label1.Font = null;
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 12);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Total";
             // 
             // label2
             // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(8, 228);
+            this.label2.AccessibleDescription = null;
+            this.label2.AccessibleName = null;
+            resources.ApplyResources(this.label2, "label2");
+            this.label2.Font = null;
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(47, 12);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "Current";
             // 
             // progressBarTatol
             // 
-            this.progressBarTatol.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBarTatol.Location = new System.Drawing.Point(70, 288);
+            this.progressBarTatol.AccessibleDescription = null;
+            this.progressBarTatol.AccessibleName = null;
+            resources.ApplyResources(this.progressBarTatol, "progressBarTatol");
+            this.progressBarTatol.BackgroundImage = null;
+            this.progressBarTatol.Font = null;
             this.progressBarTatol.Name = "progressBarTatol";
-            this.progressBarTatol.Size = new System.Drawing.Size(323, 23);
-            this.progressBarTatol.TabIndex = 2;
             // 
             // progressBarCurrentFile
             // 
-            this.progressBarCurrentFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBarCurrentFile.Location = new System.Drawing.Point(70, 250);
+            this.progressBarCurrentFile.AccessibleDescription = null;
+            this.progressBarCurrentFile.AccessibleName = null;
+            resources.ApplyResources(this.progressBarCurrentFile, "progressBarCurrentFile");
+            this.progressBarCurrentFile.BackgroundImage = null;
+            this.progressBarCurrentFile.Font = null;
             this.progressBarCurrentFile.Name = "progressBarCurrentFile";
-            this.progressBarCurrentFile.Size = new System.Drawing.Size(323, 23);
-            this.progressBarCurrentFile.TabIndex = 2;
             // 
             // labelCurrentFileAndDownRate
             // 
-            this.labelCurrentFileAndDownRate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.labelCurrentFileAndDownRate.AutoSize = true;
-            this.labelCurrentFileAndDownRate.Location = new System.Drawing.Point(68, 228);
+            this.labelCurrentFileAndDownRate.AccessibleDescription = null;
+            this.labelCurrentFileAndDownRate.AccessibleName = null;
+            resources.ApplyResources(this.labelCurrentFileAndDownRate, "labelCurrentFileAndDownRate");
+            this.labelCurrentFileAndDownRate.Font = null;
             this.labelCurrentFileAndDownRate.Name = "labelCurrentFileAndDownRate";
-            this.labelCurrentFileAndDownRate.Size = new System.Drawing.Size(65, 12);
-            this.labelCurrentFileAndDownRate.TabIndex = 0;
-            this.labelCurrentFileAndDownRate.Text = "          ";
             // 
             // label3
             // 
-            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(8, 261);
+            this.label3.AccessibleDescription = null;
+            this.label3.AccessibleName = null;
+            resources.ApplyResources(this.label3, "label3");
+            this.label3.Font = null;
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(47, 12);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "Current";
             // 
             // webBrowserNewVersionInfo
             // 
-            this.webBrowserNewVersionInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.webBrowserNewVersionInfo.Location = new System.Drawing.Point(10, 12);
+            this.webBrowserNewVersionInfo.AccessibleDescription = null;
+            this.webBrowserNewVersionInfo.AccessibleName = null;
+            resources.ApplyResources(this.webBrowserNewVersionInfo, "webBrowserNewVersionInfo");
             this.webBrowserNewVersionInfo.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowserNewVersionInfo.Name = "webBrowserNewVersionInfo";
-            this.webBrowserNewVersionInfo.Size = new System.Drawing.Size(383, 202);
-            this.webBrowserNewVersionInfo.TabIndex = 1;
             this.webBrowserNewVersionInfo.Url = new System.Uri("http://www.hmongsoft.com/?Soft=HmongDict&Action=GetNewVersionInfo", System.UriKind.Absolute);
             // 
             // buttonUpdate
             // 
-            this.buttonUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonUpdate.Location = new System.Drawing.Point(10, 330);
+            this.buttonUpdate.AccessibleDescription = null;
+            this.buttonUpdate.AccessibleName = null;
+            resources.ApplyResources(this.buttonUpdate, "buttonUpdate");
+            this.buttonUpdate.BackgroundImage = null;
+            this.buttonUpdate.Font = null;
             this.buttonUpdate.Name = "buttonUpdate";
-            this.buttonUpdate.Size = new System.Drawing.Size(111, 23);
-            this.buttonUpdate.TabIndex = 3;
-            this.buttonUpdate.Text = "Start";
             this.buttonUpdate.UseVisualStyleBackColor = true;
             this.buttonUpdate.Click += new System.EventHandler(this.buttonUpdate_Click);
             // 
             // buttonPauseUpdate
             // 
-            this.buttonPauseUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonPauseUpdate.Location = new System.Drawing.Point(146, 330);
+            this.buttonPauseUpdate.AccessibleDescription = null;
+            this.buttonPauseUpdate.AccessibleName = null;
+            resources.ApplyResources(this.buttonPauseUpdate, "buttonPauseUpdate");
+            this.buttonPauseUpdate.BackgroundImage = null;
+            this.buttonPauseUpdate.Font = null;
             this.buttonPauseUpdate.Name = "buttonPauseUpdate";
-            this.buttonPauseUpdate.Size = new System.Drawing.Size(111, 23);
-            this.buttonPauseUpdate.TabIndex = 3;
-            this.buttonPauseUpdate.Text = "Suspend";
             this.buttonPauseUpdate.UseVisualStyleBackColor = true;
             this.buttonPauseUpdate.Click += new System.EventHandler(this.buttonPauseUpdate_Click);
             // 
             // buttonExit
             // 
-            this.buttonExit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.buttonExit.Location = new System.Drawing.Point(282, 330);
+            this.buttonExit.AccessibleDescription = null;
+            this.buttonExit.AccessibleName = null;
+            resources.ApplyResources(this.buttonExit, "buttonExit");
+            this.buttonExit.BackgroundImage = null;
+            this.buttonExit.Font = null;
             this.buttonExit.Name = "buttonExit";
-            this.buttonExit.Size = new System.Drawing.Size(111, 23);
-            this.buttonExit.TabIndex = 3;
-            this.buttonExit.Text = "Stop && Exit";
             this.buttonExit.UseVisualStyleBackColor = true;
             this.buttonExit.Click += new System.EventHandler(this.buttonExit_Click);
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AccessibleDescription = null;
+            this.AccessibleName = null;
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(403, 365);
+            this.BackgroundImage = null;
             this.Controls.Add(this.buttonExit);
             this.Controls.Add(this.buttonPauseUpdate);
             this.Controls.Add(this.buttonUpdate);
@@ -158,9 +150,9 @@
             this.Controls.Add(this.labelCurrentFileAndDownRate);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label1);
+            this.Font = null;
+            this.Icon = null;
             this.Name = "Form1";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Update";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

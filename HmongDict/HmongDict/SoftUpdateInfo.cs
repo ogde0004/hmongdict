@@ -41,6 +41,14 @@ namespace HmongDict
             }
         }
 
+        public int FileCount
+        {
+            get
+            {
+                return m_nFileList.Count;
+            }
+        }
+
         public UpdateFileInfo this[int index]
         {
             get

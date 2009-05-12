@@ -12,6 +12,7 @@ using System.Globalization;
 using UILanguage;
 using Downloader;
 using System.Net;
+using System.Security.Cryptography;
 using System.Diagnostics;
 
 namespace HmongDict
@@ -20,18 +21,20 @@ namespace HmongDict
     {
         Database m_Database = null;
         GetWord getWord = null;
+        Thread m_MainThread = null;
         string[] m_strArrSelectedDictionaries = null;
         string[] m_strArrDictionaries = null;
 
         const string m_strMiniHomgPageUrl = @"http://www.hmongsoft.com/?Soft=HmongDict&Action=GetMiniHomePage";
         const string m_strAddNewWordsPageUrl = @"http://www.hmongsoft.com/?Soft=HmongDict&Action=AddNewWords";
         const string m_strAboutPageUrl = @"http://www.hmongsoft.com/?Soft=HmongDict&Action=About";
-        const string m_strGetLastVersionPageUrl = @"http://www.hmongsoft.com/Default.aspx?Soft=HmongDict&Action=GetLastVersionInfo";
+        const string m_strGetLastVersionPageUrl = @"http://test.hmongsoft.com/Hmong%20Dictionary/AutoUpdate/?Soft=HmongDict&Action=GetUpdateInfo";
 
         public Form1()
         {
             InitializeComponent();
 
+            m_MainThread = Thread.CurrentThread;
             string strCurrentLanguage = GetCurrentUILanguage();
 
             this.webBrowserShowResult.Navigate(m_strMiniHomgPageUrl + "&Language=" + GetCurrentUILanguage());
@@ -76,30 +79,58 @@ namespace HmongDict
         {
             try
             {
-                SoftUpdateInfo sui = new SoftUpdateInfo();
-                sui.LoadFile(m_strGetLastVersionPageUrl);
+                Thread.Sleep(3000);
+                string strUpdateInfoXmlContent = GetUrlContent(m_strGetLastVersionPageUrl);
+                if (strUpdateInfoXmlContent.Length == 0)
+                    return;
 
-                if (sui.Version.Length > 0)
+                File.WriteAllText(Application.StartupPath + "UpdateInfo.xml", strUpdateInfoXmlContent, Encoding.Default);
+                if (!File.Exists(Application.StartupPath + "UpdateInfo.xml"))
+                    return;
+
+                SoftUpdateInfo sui = new SoftUpdateInfo();
+                sui.LoadFile(Application.StartupPath + "UpdateInfo.xml");
+
+                bool bNeedUpdate = false;
+
+                for (int i=0; i<sui.FileCount; i++)
                 {
-                    if (VersionCompare.CompareResult.Greater == VersionCompare.Compare(sui.Version, Application.ProductVersion))
+                    string strLocalFile = sui[i].Dir + sui[i].FileName + sui[i].ExtName;
+                    if (File.Exists(strLocalFile))
                     {
-                        string strUpdateAppPath = Application.StartupPath + @"\Update.exe";
-                        if (File.Exists(strUpdateAppPath))
+                        if (GetMD5HashFromFile(strLocalFile) != sui[i].MD5)
                         {
-                            Process pro = new Process();
-                            pro.StartInfo.Arguments = "";
-                            pro.StartInfo.FileName = strUpdateAppPath;
-                            pro.Start();
+                            bNeedUpdate = true;
+                            break;
                         }
+
+                        FileInfo fi = new FileInfo(strLocalFile);
+                        if (fi.Length != sui[i].Size)
+                        {
+                            bNeedUpdate = true;
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        bNeedUpdate = true;
+                        break;
+                    }
+                }
+
+                if (bNeedUpdate)
+                {
+                    string strUpdateAppPath = Application.StartupPath + @"\Update.exe";
+                    if (File.Exists(strUpdateAppPath))
+                    {
+                        Process pro = new Process();
+                        pro.StartInfo.Arguments = "/UIL:" + GetCurrentUILanguage() + " /MainApp:" + Application.ProductName + ".exe" + " /UpdateInfoXmlFile:UpdateInfo.xml /GuiVisible:False /AutoUpdate:True";
+                        pro.StartInfo.FileName = strUpdateAppPath;
+                        pro.Start();
                     }
                 }
             }
             catch{}
-        }
-
-        private string GetLastVersion()
-        {
-            return GetUrlContent(m_strGetLastVersionPageUrl);
         }
 
         private string GetUrlContent(string strUrl)
@@ -131,9 +162,33 @@ namespace HmongDict
             }
         }
 
+        public string GetMD5HashFromFile(string fileName)
+        {
+            FileStream fileStream = File.OpenRead(fileName);
+            string md5String = GetMD5HashFromStream(fileStream);
+            fileStream.Close();
+            fileStream.Dispose();
+
+            return md5String;
+        }
+
+        public string GetMD5HashFromStream(Stream stream)
+        {
+            MD5 md5 = new MD5CryptoServiceProvider();
+            byte[] retVal = md5.ComputeHash(stream);
+
+            string strRet = "";
+            foreach (byte btVal in retVal)
+            {
+                strRet += btVal.ToString("X2");
+            }
+
+            return strRet;
+        }
+
         private string GetCurrentUILanguage()
         {
-            return UILanguage.UILanguage.GetCurrentUILanguage(Thread.CurrentThread);
+            return UILanguage.UILanguage.GetCurrentUILanguage(m_MainThread);
         }
 
         private string GetTableFullNameColumnTitle()
