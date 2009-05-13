@@ -8,6 +8,7 @@ using System.Text;
 using System.Globalization;
 using System.Windows.Forms;
 using System.Threading;
+using System.Security.Cryptography;
 using UILanguage;
 using Downloader;
 
@@ -19,6 +20,8 @@ namespace Update
         string m_strMainApp = "HmongDict.exe";
 
         bool m_bAutoUpdate = false;
+
+        Downloader.Downloader m_Downloader = new Downloader.Downloader();
 
         public Form1()
         {
@@ -68,6 +71,8 @@ namespace Update
                 }
             }
 
+            InitUpdateFilesList();
+
             if (m_bAutoUpdate)
             {
                 buttonUpdate_Click(null, null);
@@ -77,17 +82,76 @@ namespace Update
         private void buttonUpdate_Click(object sender, EventArgs e)
         {
             this.buttonUpdate.Enabled = false;
-            MessageBox.Show("autoupdate");
+            
+            m_Downloader.Start();
+            
+            this.buttonPauseUpdate.Enabled = true;
         }
 
         private void buttonPauseUpdate_Click(object sender, EventArgs e)
         {
+            this.buttonPauseUpdate.Enabled = false;
 
+            m_Downloader.Suspend();
+
+            this.buttonUpdate.Enabled = true;
         }
 
         private void buttonExit_Click(object sender, EventArgs e)
         {
+            this.Hide();
+            m_Downloader.Stop();
             this.Close();
+        }
+
+        private void InitUpdateFilesList()
+        {
+            try
+            {
+                if (!File.Exists(Application.StartupPath + @"\" + m_strXmlFile))
+                    return;
+
+                SoftUpdateInfo sui = new SoftUpdateInfo();
+                sui.LoadFile(Application.StartupPath + @"\" + m_strXmlFile);
+
+                bool bNeedUpdate = false;
+
+                for (int i = 0; i < sui.FileCount; i++)
+                {
+                    string strLocalFile = sui[i].Dir + sui[i].FileName + sui[i].ExtName;
+                    if ( (!File.Exists(strLocalFile))
+                        || (GetMD5HashFromFile(strLocalFile) != sui[i].MD5) )
+                    {
+                        m_Downloader.AddTask(sui[i].GetUrl(0), strLocalFile + ".Up");
+                        break;
+                    }
+                }
+            }
+            catch { }
+        }
+
+        public string GetMD5HashFromFile(string fileName)
+        {
+            FileStream fileStream = File.OpenRead(fileName);
+            string md5String = GetMD5HashFromStream(fileStream);
+            fileStream.Close();
+            fileStream.Dispose();
+
+            return md5String;
+        }
+
+        public string GetMD5HashFromStream(Stream stream)
+        {
+            MD5 md5 = new MD5CryptoServiceProvider();
+            byte[] retVal = md5.ComputeHash(stream);
+
+            string strRet = "";
+            foreach (byte btVal in retVal)
+            {
+                strRet += btVal.ToString("X2");
+            }
+
+            return strRet;
         }
     }
 }
