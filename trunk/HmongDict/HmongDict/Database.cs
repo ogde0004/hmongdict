@@ -10,15 +10,15 @@ namespace HmongDict
     {
         SQLiteConnection SQLiteCon = null;
         
-        public Database()
+        public Database(string strDbFile)
         {
-            if (!(File.Exists(@"Dict.db")))
+            if (!(File.Exists(strDbFile)))
             {
                 throw new Exception("Database File not exists");
             }
             
             SQLiteCon = new SQLiteConnection();
-            SQLiteCon.ConnectionString = @"Data Source=Dict.db; Password=Hmong";
+            SQLiteCon.ConnectionString = @"Data Source=" + strDbFile + "; Password=Hmong";
             SQLiteCon.Open();
         }
 

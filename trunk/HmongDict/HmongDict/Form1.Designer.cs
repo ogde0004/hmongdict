@@ -62,9 +62,13 @@
             // 
             // comboBoxWord
             // 
+            this.comboBoxWord.AccessibleDescription = null;
+            this.comboBoxWord.AccessibleName = null;
             resources.ApplyResources(this.comboBoxWord, "comboBoxWord");
+            this.comboBoxWord.BackgroundImage = null;
             this.comboBoxWord.DropDownHeight = 400;
             this.comboBoxWord.DropDownWidth = 262;
+            this.comboBoxWord.Font = null;
             this.comboBoxWord.FormattingEnabled = true;
             this.comboBoxWord.Name = "comboBoxWord";
             this.comboBoxWord.SizeChanged += new System.EventHandler(this.comboBoxWord_SizeChanged);
@@ -73,13 +77,19 @@
             // 
             // buttonSearch
             // 
+            this.buttonSearch.AccessibleDescription = null;
+            this.buttonSearch.AccessibleName = null;
             resources.ApplyResources(this.buttonSearch, "buttonSearch");
+            this.buttonSearch.BackgroundImage = null;
+            this.buttonSearch.Font = null;
             this.buttonSearch.Name = "buttonSearch";
             this.buttonSearch.UseVisualStyleBackColor = true;
             this.buttonSearch.Click += new System.EventHandler(this.buttonSearch_Click);
             // 
             // webBrowserShowResult
             // 
+            this.webBrowserShowResult.AccessibleDescription = null;
+            this.webBrowserShowResult.AccessibleName = null;
             resources.ApplyResources(this.webBrowserShowResult, "webBrowserShowResult");
             this.webBrowserShowResult.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowserShowResult.Name = "webBrowserShowResult";
@@ -88,97 +98,147 @@
             // 
             // tabControlMain
             // 
+            this.tabControlMain.AccessibleDescription = null;
+            this.tabControlMain.AccessibleName = null;
             resources.ApplyResources(this.tabControlMain, "tabControlMain");
+            this.tabControlMain.BackgroundImage = null;
             this.tabControlMain.ContextMenuStrip = this.contextMenuStripMainUI;
             this.tabControlMain.Controls.Add(this.tabPageSearch);
             this.tabControlMain.Controls.Add(this.tabPageOption);
             this.tabControlMain.Controls.Add(this.tabPageAddNewWord);
             this.tabControlMain.Controls.Add(this.tabPageAbout);
+            this.tabControlMain.Font = null;
             this.tabControlMain.Name = "tabControlMain";
             this.tabControlMain.SelectedIndex = 0;
             // 
             // contextMenuStripMainUI
             // 
+            this.contextMenuStripMainUI.AccessibleDescription = null;
+            this.contextMenuStripMainUI.AccessibleName = null;
+            resources.ApplyResources(this.contextMenuStripMainUI, "contextMenuStripMainUI");
+            this.contextMenuStripMainUI.BackgroundImage = null;
+            this.contextMenuStripMainUI.Font = null;
             this.contextMenuStripMainUI.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.GetScreenWordToolStripMenuItem,
             this.languageToolStripMenuItem});
             this.contextMenuStripMainUI.Name = "contextMenuStripMainUI";
-            resources.ApplyResources(this.contextMenuStripMainUI, "contextMenuStripMainUI");
             // 
             // GetScreenWordToolStripMenuItem
             // 
+            this.GetScreenWordToolStripMenuItem.AccessibleDescription = null;
+            this.GetScreenWordToolStripMenuItem.AccessibleName = null;
+            resources.ApplyResources(this.GetScreenWordToolStripMenuItem, "GetScreenWordToolStripMenuItem");
+            this.GetScreenWordToolStripMenuItem.BackgroundImage = null;
             this.GetScreenWordToolStripMenuItem.CheckOnClick = true;
             this.GetScreenWordToolStripMenuItem.Name = "GetScreenWordToolStripMenuItem";
-            resources.ApplyResources(this.GetScreenWordToolStripMenuItem, "GetScreenWordToolStripMenuItem");
+            this.GetScreenWordToolStripMenuItem.ShortcutKeyDisplayString = null;
             this.GetScreenWordToolStripMenuItem.Click += new System.EventHandler(this.GetScreenWordToolStripMenuItem_Click);
             // 
             // languageToolStripMenuItem
             // 
+            this.languageToolStripMenuItem.AccessibleDescription = null;
+            this.languageToolStripMenuItem.AccessibleName = null;
+            resources.ApplyResources(this.languageToolStripMenuItem, "languageToolStripMenuItem");
+            this.languageToolStripMenuItem.BackgroundImage = null;
             this.languageToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.hmongToolStripMenuItem,
             this.chineseToolStripMenuItem,
             this.englishToolStripMenuItem});
             this.languageToolStripMenuItem.Name = "languageToolStripMenuItem";
-            resources.ApplyResources(this.languageToolStripMenuItem, "languageToolStripMenuItem");
+            this.languageToolStripMenuItem.ShortcutKeyDisplayString = null;
             // 
             // hmongToolStripMenuItem
             // 
-            this.hmongToolStripMenuItem.Name = "hmongToolStripMenuItem";
+            this.hmongToolStripMenuItem.AccessibleDescription = null;
+            this.hmongToolStripMenuItem.AccessibleName = null;
             resources.ApplyResources(this.hmongToolStripMenuItem, "hmongToolStripMenuItem");
+            this.hmongToolStripMenuItem.BackgroundImage = null;
+            this.hmongToolStripMenuItem.Name = "hmongToolStripMenuItem";
+            this.hmongToolStripMenuItem.ShortcutKeyDisplayString = null;
             this.hmongToolStripMenuItem.Click += new System.EventHandler(this.hmongToolStripMenuItem_Click);
             // 
             // chineseToolStripMenuItem
             // 
-            this.chineseToolStripMenuItem.Name = "chineseToolStripMenuItem";
+            this.chineseToolStripMenuItem.AccessibleDescription = null;
+            this.chineseToolStripMenuItem.AccessibleName = null;
             resources.ApplyResources(this.chineseToolStripMenuItem, "chineseToolStripMenuItem");
+            this.chineseToolStripMenuItem.BackgroundImage = null;
+            this.chineseToolStripMenuItem.Name = "chineseToolStripMenuItem";
+            this.chineseToolStripMenuItem.ShortcutKeyDisplayString = null;
             this.chineseToolStripMenuItem.Click += new System.EventHandler(this.chineseToolStripMenuItem_Click);
             // 
             // englishToolStripMenuItem
             // 
-            this.englishToolStripMenuItem.Name = "englishToolStripMenuItem";
+            this.englishToolStripMenuItem.AccessibleDescription = null;
+            this.englishToolStripMenuItem.AccessibleName = null;
             resources.ApplyResources(this.englishToolStripMenuItem, "englishToolStripMenuItem");
+            this.englishToolStripMenuItem.BackgroundImage = null;
+            this.englishToolStripMenuItem.Name = "englishToolStripMenuItem";
+            this.englishToolStripMenuItem.ShortcutKeyDisplayString = null;
             this.englishToolStripMenuItem.Click += new System.EventHandler(this.englishToolStripMenuItem_Click);
             // 
             // tabPageSearch
             // 
+            this.tabPageSearch.AccessibleDescription = null;
+            this.tabPageSearch.AccessibleName = null;
+            resources.ApplyResources(this.tabPageSearch, "tabPageSearch");
+            this.tabPageSearch.BackgroundImage = null;
             this.tabPageSearch.Controls.Add(this.webBrowserShowResult);
             this.tabPageSearch.Controls.Add(this.buttonSearch);
             this.tabPageSearch.Controls.Add(this.comboBoxWord);
-            resources.ApplyResources(this.tabPageSearch, "tabPageSearch");
+            this.tabPageSearch.Font = null;
             this.tabPageSearch.Name = "tabPageSearch";
             this.tabPageSearch.UseVisualStyleBackColor = true;
             // 
             // tabPageOption
             // 
-            this.tabPageOption.Controls.Add(this.groupBox1);
+            this.tabPageOption.AccessibleDescription = null;
+            this.tabPageOption.AccessibleName = null;
             resources.ApplyResources(this.tabPageOption, "tabPageOption");
+            this.tabPageOption.BackgroundImage = null;
+            this.tabPageOption.Controls.Add(this.groupBox1);
+            this.tabPageOption.Font = null;
             this.tabPageOption.Name = "tabPageOption";
             this.tabPageOption.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.checkedListBoxDictionaryList);
+            this.groupBox1.AccessibleDescription = null;
+            this.groupBox1.AccessibleName = null;
             resources.ApplyResources(this.groupBox1, "groupBox1");
+            this.groupBox1.BackgroundImage = null;
+            this.groupBox1.Controls.Add(this.checkedListBoxDictionaryList);
+            this.groupBox1.Font = null;
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.TabStop = false;
             // 
             // checkedListBoxDictionaryList
             // 
-            this.checkedListBoxDictionaryList.CheckOnClick = true;
-            this.checkedListBoxDictionaryList.FormattingEnabled = true;
+            this.checkedListBoxDictionaryList.AccessibleDescription = null;
+            this.checkedListBoxDictionaryList.AccessibleName = null;
             resources.ApplyResources(this.checkedListBoxDictionaryList, "checkedListBoxDictionaryList");
+            this.checkedListBoxDictionaryList.BackgroundImage = null;
+            this.checkedListBoxDictionaryList.CheckOnClick = true;
+            this.checkedListBoxDictionaryList.Font = null;
+            this.checkedListBoxDictionaryList.FormattingEnabled = true;
             this.checkedListBoxDictionaryList.Name = "checkedListBoxDictionaryList";
             this.checkedListBoxDictionaryList.SelectedIndexChanged += new System.EventHandler(this.checkedListBoxDictionaryList_SelectedIndexChanged);
             // 
             // tabPageAddNewWord
             // 
-            this.tabPageAddNewWord.Controls.Add(this.webBrowserAddNewWords);
+            this.tabPageAddNewWord.AccessibleDescription = null;
+            this.tabPageAddNewWord.AccessibleName = null;
             resources.ApplyResources(this.tabPageAddNewWord, "tabPageAddNewWord");
+            this.tabPageAddNewWord.BackgroundImage = null;
+            this.tabPageAddNewWord.Controls.Add(this.webBrowserAddNewWords);
+            this.tabPageAddNewWord.Font = null;
             this.tabPageAddNewWord.Name = "tabPageAddNewWord";
             this.tabPageAddNewWord.UseVisualStyleBackColor = true;
             // 
             // webBrowserAddNewWords
             // 
+            this.webBrowserAddNewWords.AccessibleDescription = null;
+            this.webBrowserAddNewWords.AccessibleName = null;
             resources.ApplyResources(this.webBrowserAddNewWords, "webBrowserAddNewWords");
             this.webBrowserAddNewWords.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowserAddNewWords.Name = "webBrowserAddNewWords";
@@ -186,13 +246,19 @@
             // 
             // tabPageAbout
             // 
-            this.tabPageAbout.Controls.Add(this.webBrowserAbout);
+            this.tabPageAbout.AccessibleDescription = null;
+            this.tabPageAbout.AccessibleName = null;
             resources.ApplyResources(this.tabPageAbout, "tabPageAbout");
+            this.tabPageAbout.BackgroundImage = null;
+            this.tabPageAbout.Controls.Add(this.webBrowserAbout);
+            this.tabPageAbout.Font = null;
             this.tabPageAbout.Name = "tabPageAbout";
             this.tabPageAbout.UseVisualStyleBackColor = true;
             // 
             // webBrowserAbout
             // 
+            this.webBrowserAbout.AccessibleDescription = null;
+            this.webBrowserAbout.AccessibleName = null;
             resources.ApplyResources(this.webBrowserAbout, "webBrowserAbout");
             this.webBrowserAbout.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowserAbout.Name = "webBrowserAbout";
@@ -200,24 +266,36 @@
             // 
             // statusStrip1
             // 
+            this.statusStrip1.AccessibleDescription = null;
+            this.statusStrip1.AccessibleName = null;
+            resources.ApplyResources(this.statusStrip1, "statusStrip1");
+            this.statusStrip1.BackgroundImage = null;
             this.statusStrip1.ContextMenuStrip = this.contextMenuStripMainUI;
+            this.statusStrip1.Font = null;
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabelMessage});
-            resources.ApplyResources(this.statusStrip1, "statusStrip1");
             this.statusStrip1.Name = "statusStrip1";
             // 
             // toolStripStatusLabelMessage
             // 
-            this.toolStripStatusLabelMessage.Name = "toolStripStatusLabelMessage";
+            this.toolStripStatusLabelMessage.AccessibleDescription = null;
+            this.toolStripStatusLabelMessage.AccessibleName = null;
             resources.ApplyResources(this.toolStripStatusLabelMessage, "toolStripStatusLabelMessage");
+            this.toolStripStatusLabelMessage.BackgroundImage = null;
+            this.toolStripStatusLabelMessage.Name = "toolStripStatusLabelMessage";
             // 
             // Form1
             // 
+            this.AccessibleDescription = null;
+            this.AccessibleName = null;
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackgroundImage = null;
             this.ContextMenuStrip = this.contextMenuStripMainUI;
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.tabControlMain);
+            this.Font = null;
+            this.Icon = null;
             this.Name = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.tabControlMain.ResumeLayout(false);

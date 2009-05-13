@@ -62,6 +62,14 @@ namespace Downloader
             AddTask(task);
         }
 
+        public int Count
+        {
+            get
+            {
+                return m_DownloadList.Count;
+            }
+        }
+
         public string CurrentFileName
         {
             get
