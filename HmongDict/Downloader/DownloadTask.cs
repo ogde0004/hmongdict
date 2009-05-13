@@ -11,7 +11,6 @@ namespace Downloader
         string m_SaveAsFile;
         object m_objFileLength = (long)0;             //当前文件总长度
         object m_objBytesReadCount = (long)0;         //当前文件已经读取字节数
-        bool m_bSuccess;
 
         public long BytesReadCount
         {
@@ -59,12 +58,7 @@ namespace Downloader
         {
             get
             {
-                return m_bSuccess;
-            }
-
-            set
-            {
-                m_bSuccess = value;
+                return (BytesReadCount == FileLength);
             }
         }
         /// <summary>

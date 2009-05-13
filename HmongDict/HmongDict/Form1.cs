@@ -25,6 +25,9 @@ namespace HmongDict
         string[] m_strArrSelectedDictionaries = null;
         string[] m_strArrDictionaries = null;
 
+        readonly string m_strDbFile = @".\Dict.db";     //必须带目录 .\
+        string m_strDbFileMD5 = null;
+
         const string m_strMiniHomgPageUrl = @"http://www.hmongsoft.com/?Soft=HmongDict&Action=GetMiniHomePage";
         const string m_strAddNewWordsPageUrl = @"http://www.hmongsoft.com/?Soft=HmongDict&Action=AddNewWords";
         const string m_strAboutPageUrl = @"http://www.hmongsoft.com/?Soft=HmongDict&Action=About";
@@ -62,11 +65,39 @@ namespace HmongDict
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            m_Database = new Database();
+            if (File.Exists("UpdateDownload.OK"))
+            {
+                File.Delete("UpdateDownload.OK"); MessageBox.Show("UpdateDownload.OK");
 
-            GetDictinaries();
-            GetSelectedDictinaries();
-            CheckNewVersion();
+                string strUpdateAppPath = Application.StartupPath + @"\Update.exe";
+
+                if (File.Exists(strUpdateAppPath + ".Up"))
+                {
+                    if (File.Exists(strUpdateAppPath))
+                        File.Delete(strUpdateAppPath);
+
+                    File.Move(strUpdateAppPath + ".Up", strUpdateAppPath);
+                }
+
+                if (File.Exists(strUpdateAppPath))
+                {
+                    Process pro = new Process();
+                    pro.StartInfo.Arguments = "/RenameUpdateFiles:Ext=Up /OnlyRenameFiles:True /UIL:" + GetCurrentUILanguage() + " /MainApp:" + Application.ProductName + ".exe" + " /GuiVisible:False";
+                    pro.StartInfo.FileName = strUpdateAppPath;
+                    pro.Start();
+                }
+
+                this.Close();
+            }
+            else
+            {
+                m_strDbFileMD5 = GetMD5HashFromFile(m_strDbFile);
+                m_Database = new Database(m_strDbFile);
+
+                GetDictinaries();
+                GetSelectedDictinaries();
+                CheckNewVersion();
+            }
         }
 
         private void CheckNewVersion()
@@ -84,32 +115,42 @@ namespace HmongDict
                 if (strUpdateInfoXmlContent.Length == 0)
                     return;
 
-                File.WriteAllText(Application.StartupPath + "UpdateInfo.xml", strUpdateInfoXmlContent, Encoding.Default);
-                if (!File.Exists(Application.StartupPath + "UpdateInfo.xml"))
+                File.WriteAllText(Application.StartupPath + @"\UpdateInfo.xml", strUpdateInfoXmlContent, Encoding.Default);
+                if (!File.Exists(Application.StartupPath + @"\UpdateInfo.xml"))
                     return;
 
                 SoftUpdateInfo sui = new SoftUpdateInfo();
-                sui.LoadFile(Application.StartupPath + "UpdateInfo.xml");
+                sui.LoadFile(Application.StartupPath + @"\UpdateInfo.xml");
 
                 bool bNeedUpdate = false;
 
                 for (int i=0; i<sui.FileCount; i++)
                 {
-                    string strLocalFile = sui[i].Dir + sui[i].FileName + sui[i].ExtName;
+                    string strLocalFile = sui[i].Dir.Replace('/', '\\') + sui[i].FileName + sui[i].ExtName;
                     if (File.Exists(strLocalFile))
                     {
-                        if (GetMD5HashFromFile(strLocalFile) != sui[i].MD5)
+                        try
                         {
-                            bNeedUpdate = true;
-                            break;
-                        }
+                            string strMD5 = "";
+                            if (strLocalFile == m_strDbFile)
+                                strMD5 = m_strDbFileMD5;
+                            else
+                                strMD5 = GetMD5HashFromFile(Application.StartupPath + @"\" + strLocalFile);
 
-                        FileInfo fi = new FileInfo(strLocalFile);
-                        if (fi.Length != sui[i].Size)
-                        {
-                            bNeedUpdate = true;
-                            break;
+                            if (strMD5 != sui[i].MD5)
+                            {
+                                bNeedUpdate = true;
+                                break;
+                            }
+
+                            FileInfo fi = new FileInfo(Application.StartupPath + @"\" + strLocalFile);
+                            if (fi.Length != sui[i].Size)
+                            {
+                                bNeedUpdate = true;
+                                break;
+                            }
                         }
+                        catch { }
                     }
                     else
                     {
@@ -124,7 +165,7 @@ namespace HmongDict
                     if (File.Exists(strUpdateAppPath))
                     {
                         Process pro = new Process();
-                        pro.StartInfo.Arguments = "/UIL:" + GetCurrentUILanguage() + " /MainApp:" + Application.ProductName + ".exe" + " /UpdateInfoXmlFile:UpdateInfo.xml /GuiVisible:False /AutoUpdate:True";
+                        pro.StartInfo.Arguments = "/UIL:" + GetCurrentUILanguage() + " /MainApp:" + Application.ProductName + ".exe" + " /UpdateInfoXmlFile:UpdateInfo.xml /GuiVisible:False /AutoUpdate:True /FileMD5:" + m_strDbFile + "=" + m_strDbFileMD5;
                         pro.StartInfo.FileName = strUpdateAppPath;
                         pro.Start();
                     }
