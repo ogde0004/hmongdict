@@ -65,12 +65,12 @@ namespace Update
                         break;
 
                     case "/GuiVisible":
-                        /*if (action[1].ToLower() == "false")
+                        if (action[1].ToLower() == "false")
                         {
                             this.Opacity = 0.0;
                             this.ShowInTaskbar = false;
                             this.Visible = false;
-                        }*/
+                        }
                         break;
 
                     case "/MainApp":
@@ -94,19 +94,18 @@ namespace Update
                         File.Move(rf[0], rf[1]);
                         break;
 
-                    case "/RenameUpdateFiles": MessageBox.Show("RenameUpdateFiles");
-                        RenameUpdateFiles(Application.StartupPath + @"\");
+                    case "/RenameUpdateFiles":
+                        Program.RenameUpdateFiles(Application.StartupPath + @"\");
                         break;
 
                     case "/OnlyRenameFiles":
-                        bOnlyRenameFiles = (action[1].ToLower() == "true"); MessageBox.Show("bOnlyRenameFiles = " + bOnlyRenameFiles.ToString());
+                        bOnlyRenameFiles = (action[1].ToLower() == "true");
                         break;
                 }
             }
 
             if (bOnlyRenameFiles)
             {
-                MessageBox.Show("up files");
                 Process pro = new Process();
                 pro.StartInfo.Arguments = "";
                 pro.StartInfo.FileName = m_strMainApp;
@@ -122,43 +121,6 @@ namespace Update
                 {
                     buttonUpdate_Click(null, null);
                 }
-            }
-        }
-
-        private void RenameUpdateFiles(string strDir)
-        {
-            string[] fs = Directory.GetFiles(strDir);
-            foreach (string file in fs)
-            {
-                MessageBox.Show(file);
-                FileInfo fi = new FileInfo(file);
-                if (fi.Extension.ToLower() == ".up")
-                {
-                    string strDestFile = file.Remove(file.Length - 3, 3);
-
-                    while (true)
-                    {
-                        try
-                        {
-                            if (File.Exists(strDestFile))
-                                File.Delete(strDestFile);
-
-                            File.Move(file, strDestFile);
-
-                            break;
-                        }
-                        catch
-                        {
-                            Thread.Sleep(500);
-                        }
-                    }
-                }
-            }
-
-            string[] ds = Directory.GetDirectories(strDir);
-            foreach (string dir in ds)
-            {
-                RenameUpdateFiles(dir);
             }
         }
 
@@ -237,7 +199,18 @@ namespace Update
 
         public string GetMD5HashFromFile(string fileName)
         {
-            FileStream fileStream = File.OpenRead(fileName);
+            FileStream fileStream = null;
+
+            try
+            {
+                fileStream = File.OpenRead(fileName);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("获取文件MD5值失败，文件正在被使用。\n\n: " + e.Message);
+                throw new Exception("获取文件MD5值失败，文件正在被使用。\n\n: " + e.Message);
+            }
+
             string md5String = GetMD5HashFromStream(fileStream);
             fileStream.Close();
             fileStream.Dispose();
@@ -284,6 +257,12 @@ namespace Update
                 this.progressBarCurrentFile.Value = this.progressBarCurrentFile.Maximum;
                 this.progressBarTotal.Value = this.progressBarTotal.Maximum;
             }
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (File.Exists(m_strXmlFile))
+                File.Delete(m_strXmlFile);
         }
     }
 }

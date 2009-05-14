@@ -65,10 +65,20 @@ namespace HmongDict
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            UpdateLocalFiles(true);
+
+            m_strDbFileMD5 = GetMD5HashFromFile(m_strDbFile);
+            m_Database = new Database(m_strDbFile);
+
+            GetDictinaries();
+            GetSelectedDictinaries();
+            CheckNewVersion();
+        }
+
+        private void UpdateLocalFiles(bool bAutoRunSelfAfterUpdate)
+        {
             if (File.Exists("UpdateDownload.OK"))
             {
-                File.Delete("UpdateDownload.OK"); MessageBox.Show("UpdateDownload.OK");
-
                 string strUpdateAppPath = Application.StartupPath + @"\Update.exe";
 
                 if (File.Exists(strUpdateAppPath + ".Up"))
@@ -82,21 +92,12 @@ namespace HmongDict
                 if (File.Exists(strUpdateAppPath))
                 {
                     Process pro = new Process();
-                    pro.StartInfo.Arguments = "/RenameUpdateFiles:Ext=Up /OnlyRenameFiles:True /UIL:" + GetCurrentUILanguage() + " /MainApp:" + Application.ProductName + ".exe" + " /GuiVisible:False";
+                    pro.StartInfo.Arguments = "/RenameUpdateFiles:Ext=Up /OnlyRenameFiles:True /MainApp:" + Application.ProductName + ".exe" + (bAutoRunSelfAfterUpdate ? "/AutoRun:" + Application.ProductName + ".exe" : "");
                     pro.StartInfo.FileName = strUpdateAppPath;
                     pro.Start();
                 }
 
                 this.Close();
-            }
-            else
-            {
-                m_strDbFileMD5 = GetMD5HashFromFile(m_strDbFile);
-                m_Database = new Database(m_strDbFile);
-
-                GetDictinaries();
-                GetSelectedDictinaries();
-                CheckNewVersion();
             }
         }
 
@@ -167,6 +168,8 @@ namespace HmongDict
                         Process pro = new Process();
                         pro.StartInfo.Arguments = "/UIL:" + GetCurrentUILanguage() + " /MainApp:" + Application.ProductName + ".exe" + " /UpdateInfoXmlFile:UpdateInfo.xml /GuiVisible:False /AutoUpdate:True /FileMD5:" + m_strDbFile + "=" + m_strDbFileMD5;
                         pro.StartInfo.FileName = strUpdateAppPath;
+                        pro.StartInfo.CreateNoWindow = true;
+                        pro.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
                         pro.Start();
                     }
                 }
@@ -205,7 +208,18 @@ namespace HmongDict
 
         public string GetMD5HashFromFile(string fileName)
         {
-            FileStream fileStream = File.OpenRead(fileName);
+            FileStream fileStream = null;
+
+            try
+            {
+                fileStream = File.OpenRead(fileName);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("获取文件MD5值失败，文件正在被使用。\n\n: " + e.Message);
+                throw new Exception("获取文件MD5值失败，文件正在被使用。\n\n: " + e.Message);
+            }
+
             string md5String = GetMD5HashFromStream(fileStream);
             fileStream.Close();
             fileStream.Dispose();
@@ -445,6 +459,11 @@ namespace HmongDict
             }
 
             GetSelectedDictinaries();
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            UpdateLocalFiles(false);
         }
     }
 }
