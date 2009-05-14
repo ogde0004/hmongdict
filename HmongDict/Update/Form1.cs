@@ -201,15 +201,15 @@ namespace Update
         {
             FileStream fileStream = null;
 
-            try
-            {
+            /*try
+            {*/
                 fileStream = File.OpenRead(fileName);
-            }
+            /*}
             catch (Exception e)
             {
                 MessageBox.Show("获取文件MD5值失败，文件正在被使用。\n\n: " + e.Message);
                 throw new Exception("获取文件MD5值失败，文件正在被使用。\n\n: " + e.Message);
-            }
+            }*/
 
             string md5String = GetMD5HashFromStream(fileStream);
             fileStream.Close();

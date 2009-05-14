@@ -65,6 +65,14 @@ namespace HmongDict
             ParseXml(ref XmlDoc);
         }
 
+        public void LoadXmlContent(string strXmlContent)
+        {
+            XmlDocument XmlDoc = new XmlDocument();
+            XmlDoc.LoadXml(strXmlContent);
+
+            ParseXml(ref XmlDoc);
+        }
+
         private void LoadXml(string strContent)
         {
             XmlDocument XmlDoc = new XmlDocument();
