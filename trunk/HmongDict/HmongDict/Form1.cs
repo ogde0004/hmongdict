@@ -111,17 +111,13 @@ namespace HmongDict
         {
             try
             {
-                Thread.Sleep(3000);
                 string strUpdateInfoXmlContent = GetUrlContent(m_strGetLastVersionPageUrl);
                 if (strUpdateInfoXmlContent.Length == 0)
                     return;
 
-                File.WriteAllText(Application.StartupPath + @"\UpdateInfo.xml", strUpdateInfoXmlContent, Encoding.Default);
-                if (!File.Exists(Application.StartupPath + @"\UpdateInfo.xml"))
-                    return;
-
                 SoftUpdateInfo sui = new SoftUpdateInfo();
                 sui.LoadFile(Application.StartupPath + @"\UpdateInfo.xml");
+                sui.LoadXmlContent(strUpdateInfoXmlContent);
 
                 bool bNeedUpdate = false;
 
@@ -162,6 +158,8 @@ namespace HmongDict
 
                 if (bNeedUpdate)
                 {
+                    File.WriteAllText(Application.StartupPath + @"\UpdateInfo.xml", strUpdateInfoXmlContent, Encoding.Default);
+
                     string strUpdateAppPath = Application.StartupPath + @"\Update.exe";
                     if (File.Exists(strUpdateAppPath))
                     {
@@ -210,15 +208,15 @@ namespace HmongDict
         {
             FileStream fileStream = null;
 
-            try
-            {
+            /*try
+            {*/
                 fileStream = File.OpenRead(fileName);
-            }
+            /*}
             catch (Exception e)
             {
                 MessageBox.Show("获取文件MD5值失败，文件正在被使用。\n\n: " + e.Message);
                 throw new Exception("获取文件MD5值失败，文件正在被使用。\n\n: " + e.Message);
-            }
+            }*/
 
             string md5String = GetMD5HashFromStream(fileStream);
             fileStream.Close();
