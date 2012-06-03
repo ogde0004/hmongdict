@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="SQLite">
+      <UniqueIdentifier>{9fcba3d0-5baa-4823-a62b-11f3473fb5a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SQLiteProvider">
+      <UniqueIdentifier>{1a4d6b5b-4ead-4c61-afe8-500da1db5da8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SQLite\Source Files">
+      <UniqueIdentifier>{55e63412-a67e-49ab-a803-d17cce145da1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SQLite\Header Files">
+      <UniqueIdentifier>{4a025a54-6f04-49d0-9e0c-ce298f276d3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SQLiteProvider\Header Files">
+      <UniqueIdentifier>{77f109a7-d402-450b-9ef6-c34bd99b8a47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SQLiteProvider\Source Files">
+      <UniqueIdentifier>{d0739a58-5185-4be8-b9e4-417ef1b7dd9c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main">
+      <UniqueIdentifier>{6eb9a28d-7989-4874-ad27-9ba9413f8953}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Main\Header Files">
+      <UniqueIdentifier>{442a7fc7-29ae-4fb2-8681-132ca2029a7a}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc</Extensions>
+    </Filter>
+    <Filter Include="Main\Source Files">
+      <UniqueIdentifier>{58857641-8b7f-4444-9f6c-199e56155f52}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm</Extensions>
+    </Filter>
+    <Filter Include="Main\Resource Files">
+      <UniqueIdentifier>{4630d782-cda0-414c-a749-4dc8c7f44724}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;jpg;jpeg;jpe;manifest</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Main\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="HmongDict.cpp">
+      <Filter>Main\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainDlg.cpp">
+      <Filter>Main\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DatabaseManager.cpp">
+      <Filter>Main\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CodingConv.cpp">
+      <Filter>SQLiteProvider\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SQLiteCommand.cpp">
+      <Filter>SQLiteProvider\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SQLiteConnection.cpp">
+      <Filter>SQLiteProvider\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SQLiteDataReader.cpp">
+      <Filter>SQLiteProvider\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SQLiteDataTable.cpp">
+      <Filter>SQLiteProvider\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SQLiteException.cpp">
+      <Filter>SQLiteProvider\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SQLiteParameter.cpp">
+      <Filter>SQLiteProvider\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SQLiteTransaction.cpp">
+      <Filter>SQLiteProvider\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sqlite3.c">
+      <Filter>SQLite\Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>Main\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MainDlg.h">
+      <Filter>Main\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Main\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DatabaseManager.h">
+      <Filter>Main\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CodingConv.h">
+      <Filter>SQLiteProvider\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sqlite3provider.h">
+      <Filter>SQLiteProvider\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SQLiteCommand.h">
+      <Filter>SQLiteProvider\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SQLiteConnection.h">
+      <Filter>SQLiteProvider\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SQLiteDataReader.h">
+      <Filter>SQLiteProvider\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SQLiteDataTable.h">
+      <Filter>SQLiteProvider\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SQLiteDbType.h">
+      <Filter>SQLiteProvider\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SQLiteException.h">
+      <Filter>SQLiteProvider\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SQLiteParameter.h">
+      <Filter>SQLiteProvider\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SQLiteTransaction.h">
+      <Filter>SQLiteProvider\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sqlite3.h">
+      <Filter>SQLite\Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="HmongDict.rc">
+      <Filter>Main\Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\HmongDict.ico">
+      <Filter>Main\Resource Files</Filter>
+    </None>
+  </ItemGroup>
+</Project>
